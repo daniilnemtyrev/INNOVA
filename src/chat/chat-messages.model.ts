@@ -1,4 +1,12 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { User } from 'src/users/users.model';
 
 interface MessagesCreationOptions {
   userId: number;
@@ -8,6 +16,7 @@ interface MessagesCreationOptions {
 
 @Table({ tableName: 'messages' })
 export class Messages extends Model<Messages, MessagesCreationOptions> {
+  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
   })
@@ -18,4 +27,7 @@ export class Messages extends Model<Messages, MessagesCreationOptions> {
 
   @Column({ type: DataType.STRING, unique: false, allowNull: false })
   text: string;
+
+  @BelongsTo(() => User)
+  users: User;
 }

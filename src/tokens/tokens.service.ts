@@ -12,7 +12,11 @@ export class TokenService {
   ) {}
 
   generateToken(user) {
-    const payload = { email: user.email, id: user.id };
+    const payload = {
+      email: user.email,
+      userId: user.id,
+      roles: user.roles,
+    };
     return {
       acessToken: this.jwtService.sign(payload, {
         expiresIn: '30m',
@@ -23,14 +27,16 @@ export class TokenService {
     };
   }
 
-  async saveToken(userId, refreshToken) {
+  async saveToken(userId: number, refreshToken: string) {
     const tokenData = await this.tokenRepository.findOne({
       where: { userId: userId },
       include: { all: true },
     });
+
     if (tokenData) {
       tokenData.refreshToken = refreshToken;
-      return tokenData.save();
+      await tokenData.save();
+      return tokenData;
     }
     const token = await this.tokenRepository.create({
       userId: userId,

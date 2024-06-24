@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
 import { MessageDto } from 'src/chat/dto/messages.dto';
 import { ChatService } from 'src/chat/chat.service';
+import { LoginUser } from './dto/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,10 +24,9 @@ export class AuthController {
 
   @UsePipes(new ValidationPipe())
   @Post('/login')
-  async login(@Body() userDto: CreateUserDto, @Res() res: Response) {
-    console.log(userDto);
-
+  async login(@Body() userDto: LoginUser, @Res() res: Response) {
     const userData = await this.authService.login(userDto);
+
     res.cookie('refreshToken', userData.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
@@ -53,7 +53,7 @@ export class AuthController {
     @Res() res: Response,
   ) {
     //console.log(messageDto);
-    await this.chatService.saveMessages(messageDto);
+    // await this.chatService.saveMessages(messageDto);
     const { refreshToken } = req.cookies;
     const token = await this.authService.logout(refreshToken);
     res.clearCookie('refreshToken');

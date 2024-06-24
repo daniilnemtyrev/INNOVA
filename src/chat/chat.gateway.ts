@@ -1,4 +1,3 @@
-import { JwtAuthGuard } from './../auth/jwt-auth-guard';
 import { Logger, UseGuards } from '@nestjs/common';
 import {
   OnGatewayConnection,

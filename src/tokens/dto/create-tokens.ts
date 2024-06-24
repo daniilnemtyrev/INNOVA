@@ -1,4 +1,4 @@
 export class CreateTokens {
-  readonly userId: string;
+  readonly userId: number;
   readonly refreshToken: string;
 }
